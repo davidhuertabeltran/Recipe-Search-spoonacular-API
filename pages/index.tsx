@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Container, Flex, Heading, Text, FormControl, Input, Button, useColorMode } from "@chakra-ui/react";
-import {RecipeList} from "../src/sections/RecipeList";
-import {SearchHistory} from "../src/sections/SearchHistory";
+import React, { useEffect, useState, useRef } from 'react';
+import { Container, Flex, Heading, Text, FormControl, Input, Button, useBoolean } from '@chakra-ui/react';
+import {RecipeList} from '../src/sections/RecipeList';
+import {SearchHistory} from '../src/sections/SearchHistory';
 
 const Page = () => {
-	const {colorMode, toggleColorMode} = useColorMode();
+	const [open, setOpen] = useBoolean();
 
-	const apiKey = "";
+	const apiKey = '';
 	const lastSearches = 'last_searches';
 
 	const [recipeData, setRecipeData] = useState(null);
@@ -37,7 +37,7 @@ const Page = () => {
 			saveSearch(data);
 		})
 		.catch(() => {
-			console.log("An error ocurred")
+			console.log('An error ocurred')
 		})
 	}
 
@@ -81,29 +81,28 @@ const Page = () => {
 	}
 
 	return (
-	<Container maxWidth="container.xl" padding={0}>
-		<Button
-			onClick={toggleColorMode}
-			float="right"
-			position="absolute"
-			right={10} top={10}
-			transitionDuration="200ms"
-		>
-			{colorMode === 'light' ? 'Dark' : 'Light'} Mode
-		</Button>
-		<Flex p={[10, 20]} flexDirection="column" alignItems="center" gap={5} justifyContent="center">
-			<Heading size="2xl" textAlign="center">Search Recipes by Ingredients</Heading>
+	<Container maxWidth='container.xl' padding={0} onClick={open === true ? setOpen.off : null}>
+		<Flex p={[10, 20]} flexDirection='column' alignItems='center' gap={5} justifyContent='center'>
+			<Heading size='2xl' textAlign='center'>Search Recipes by Ingredients</Heading>
 			<Text>Write down your favorite ingredient</Text>
-			<FormControl maxWidth="container.lg">
-				<Flex alignItems="center" gap={5} direction={ {base: 'column', sm: 'row'}}>
-					<Input ref={inputSearch} placeholder="search" variant="filled" type="text" onChange={setQuery}/>
+			<FormControl maxWidth='container.lg'>
+				<Flex alignItems='center' gap={5} direction={ {base: 'column', sm: 'row'}}>
+					<Input
+						ref={inputSearch}
+						placeholder='search'
+						variant='filled'
+						type='text'
+						onChange={setQuery}
+						onClick={setOpen.toggle}
+					/>
+					{items && <SearchHistory lastSearches={items} searchFromHistory={searchFromHistory} open={open} />}
 					<Button onClick={getRecipesByIngredient}>
 						Search
 					</Button>
-					{items && <SearchHistory lastSearches={items} searchFromHistory={searchFromHistory} />}
+					
 				</Flex>
 			</FormControl>
-			{recipeData && <RecipeList recipeData={recipeData} /> }
+			{recipeData && <RecipeList recipeData={recipeData} ingredient={ingredient}/> }
 		</Flex>
 	</Container>
 	)

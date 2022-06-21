@@ -1,26 +1,28 @@
 import React from 'react';
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box } from '@chakra-ui/react';
 
-export const SearchHistory = ({lastSearches, searchFromHistory}) => {
+export const SearchHistory = ({lastSearches, searchFromHistory, open}) => {
 	return (
 		<Flex
-			backgroundColor="#e2e8f0"
+			backgroundColor='#e2e8f0'
 			borderRadius={6}
-			cursor="pointer"
-			flexDirection="column"
+			cursor='pointer'
+			display={open ? 'block' : 'none'}
+			flexDirection='column'
 			gap={1}
-			maxWidth="container.lg"
-			position="absolute"
+			maxWidth='container.lg'
+			position='absolute'
 			top={12}
-			width="100%"
+			width='100%'
 		>
-			{Object.values(lastSearches).map((data) => {
+			{Object.values(lastSearches).map((data, i) => {
 				return (
 					<Box
 						borderRadius={6}
+						key={i}
 						paddingLeft={3}
 						paddingRight={3}
-						_hover={{ backgroundColor: "#0052bd", color: "white" }}
+						_hover={{ backgroundColor: '#0052bd', color: 'white' }}
 						onClick={() => searchFromHistory(Object.keys(data)[0])}
 					>
 						{Object.keys(data)[0]}
