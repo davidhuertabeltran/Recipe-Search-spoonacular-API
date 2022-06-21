@@ -10,9 +10,12 @@ export const RecipeList = ({recipeData}) => {
 						border="1px" borderColor="gray.200"
 						borderRadius={6}
 						flexDirection="column"
+						gap={2}
 						height={250}
 						key={data.id}
-						padding={2}
+						justifyContent='space-between'
+						paddingX={2}
+						paddingY={4}
 						width={250}
 					>	
 						<Heading size="sm" textAlign="center">{data.title}</Heading>
