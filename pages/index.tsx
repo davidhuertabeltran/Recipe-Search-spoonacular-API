@@ -2,13 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Container, Flex, Heading, Text, FormControl, Input, Button, useBoolean } from '@chakra-ui/react';
 import {RecipeList} from '../src/sections/RecipeList';
 import {SearchHistory} from '../src/sections/SearchHistory';
+import { Header } from '../src/sections/Header';
 
 const Page = () => {
 	const [open, setOpen] = useBoolean();
-
-	const apiKey = '';
 	const lastSearches = 'last_searches';
-
 	const [recipeData, setRecipeData] = useState(null);
 	const [ingredient, setIngredient] = useState('');
 	const [items, setItems] = useState([]);
@@ -27,10 +25,12 @@ const Page = () => {
 		setIngredient(e.target.value);
 	}
 
-	function getRecipesByIngredient() {
-		fetch(
-			`https://api.spoonacular.com/recipes/findByIngredients?apiKey=${apiKey}&ingredients=${ingredient}`
-		)
+	const getRecipesByIngredient = async () => {
+		fetch(`/api/recipes?ingredient=${ingredient}`, {
+			headers: {
+				Accept: "application/json",
+			},
+		})
 		.then((response) => response.json())
 		.then((data) => {
 			setRecipeData(data);
@@ -59,7 +59,7 @@ const Page = () => {
 		} else {
 			let obj = {};
 			obj[ingredient] = searchResult;
-			recipes.push(obj);
+			recipes.splice(0, 0, obj)
 			if (recipes.length > 10) {
 				recipes.pop();
 			}
@@ -82,11 +82,12 @@ const Page = () => {
 
 	return (
 	<Container maxWidth='container.xl' padding={0} onClick={open === true ? setOpen.off : null}>
+		<Header />
 		<Flex p={[10, 20]} flexDirection='column' alignItems='center' gap={5} justifyContent='center'>
 			<Heading size='2xl' textAlign='center'>Search Recipes by Ingredients</Heading>
 			<Text>Write down your favorite ingredient</Text>
 			<FormControl maxWidth='container.lg'>
-				<Flex alignItems='center' gap={5} direction={ {base: 'column', sm: 'row'}}>
+				<Flex alignItems='center' gap={5}>
 					<Input
 						ref={inputSearch}
 						placeholder='search'
@@ -94,15 +95,20 @@ const Page = () => {
 						type='text'
 						onChange={setQuery}
 						onClick={setOpen.toggle}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								setOpen.off();
+								getRecipesByIngredient();
+							}
+						}}
 					/>
 					{items && <SearchHistory lastSearches={items} searchFromHistory={searchFromHistory} open={open} />}
 					<Button onClick={getRecipesByIngredient}>
 						Search
 					</Button>
-					
 				</Flex>
 			</FormControl>
-			{recipeData && <RecipeList recipeData={recipeData} ingredient={ingredient}/> }
+			{recipeData && <RecipeList recipeData={recipeData} /> }
 		</Flex>
 	</Container>
 	)

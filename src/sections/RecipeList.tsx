@@ -1,12 +1,13 @@
 import React from 'react';
-import { Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { Flex, Heading, Image } from '@chakra-ui/react';
 
-export const RecipeList = ({recipeData, ingredient}) => {
+export const RecipeList = ({recipeData}) => {
 	return (
 		<Flex maxWidth='container.lg' gap={5} flexWrap='wrap' justifyContent='center'>
 			{recipeData.map((data) => {
 				return (
 					<Flex
+						backgroundColor='white'
 						border='1px' borderColor='gray.200'
 						borderRadius={6}
 						flexDirection='column'
@@ -26,7 +27,6 @@ export const RecipeList = ({recipeData, ingredient}) => {
 								borderRadius={6}
 							/>
 						</Flex>
-						<Text textAlign='center'>Ingredient: {ingredient}</Text>
 					</Flex>
 				)
 			})}
