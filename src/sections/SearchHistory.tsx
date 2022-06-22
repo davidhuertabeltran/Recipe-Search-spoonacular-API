@@ -15,15 +15,15 @@ export const SearchHistory = ({lastSearches, searchFromHistory, open}) => {
 			top={12}
 			width='100%'
 		>
-			{Object.values(lastSearches).map((data, i) => {
+			{Object.values(lastSearches).map((data: object, i: number) => {
 				return (
 					<Box
 						borderRadius={6}
 						key={i}
+						onClick={() => searchFromHistory(Object.keys(data)[0])}
 						paddingLeft={3}
 						paddingRight={3}
 						_hover={{ backgroundColor: '#0052bd', color: 'white' }}
-						onClick={() => searchFromHistory(Object.keys(data)[0])}
 					>
 						{Object.keys(data)[0]}
 					</Box>

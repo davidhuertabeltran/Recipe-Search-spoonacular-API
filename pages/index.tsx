@@ -8,9 +8,9 @@ const Page = () => {
 	const [open, setOpen] = useBoolean();
 	const lastSearches = 'last_searches';
 	const [recipeData, setRecipeData] = useState(null);
-	const [ingredient, setIngredient] = useState('');
-	const [items, setItems] = useState([]);
-	const inputSearch = useRef(null);
+	const [ingredient, setIngredient] = useState<string>('');
+	const [items, setItems] = useState<Array<any>>([]);
+	const inputSearch = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		const savedRecipes = JSON.parse(localStorage.getItem(lastSearches)) || [];
@@ -21,7 +21,7 @@ const Page = () => {
 		localStorage.setItem(lastSearches, JSON.stringify(items))
 	}, [items])
 	
-	function setQuery(e) {
+	function setQuery(e: React.ChangeEvent<HTMLInputElement>) {
 		setIngredient(e.target.value);
 	}
 
@@ -41,7 +41,7 @@ const Page = () => {
 		})
 	}
 
-	function saveSearch(searchResult) {
+	function saveSearch(searchResult: any) {
 		if (items.length === 0) {
 			let obj = {};
 			obj[ingredient] = searchResult;
@@ -67,14 +67,14 @@ const Page = () => {
 		setItems(recipes);
 	}
 
-	function searchFromHistory(item) {
+	function searchFromHistory(item: string) {
 		setIngredient(item);
 		inputSearch.current.value = item;
 		getRecipesByIngredientFromSearchHistory(item);
 	}
 
-	function getRecipesByIngredientFromSearchHistory(wordFromHistory) {
-		let recipe = items.find(el => Object.keys(el)[0] === wordFromHistory);
+	function getRecipesByIngredientFromSearchHistory(ingredientFromHistory: string) {
+		let recipe = items.find(el => Object.keys(el)[0] === ingredientFromHistory);
 		if (recipe) {
 			setRecipeData(Object.values(recipe)[0]);
 		}
