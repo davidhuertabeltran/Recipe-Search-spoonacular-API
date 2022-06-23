@@ -7,9 +7,9 @@ import { Header } from '../src/sections/Header';
 const Page = () => {
 	const [open, setOpen] = useBoolean();
 	const lastSearches = 'last_searches';
-	const [recipeData, setRecipeData] = useState(null);
+	const [recipeData, setRecipeData] = useState<Array<Object>>(null);
 	const [ingredient, setIngredient] = useState<string>('');
-	const [items, setItems] = useState<Array<any>>([]);
+	const [items, setItems] = useState<Array<Object>>([]);
 	const inputSearch = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
@@ -41,7 +41,7 @@ const Page = () => {
 		})
 	}
 
-	function saveSearch(searchResult: any) {
+	function saveSearch(searchResult: Array<Object>) {
 		if (items.length === 0) {
 			let obj = {};
 			obj[ingredient] = searchResult;
