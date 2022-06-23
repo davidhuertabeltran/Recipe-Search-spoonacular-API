@@ -11,6 +11,7 @@ const Page = () => {
 	const [ingredient, setIngredient] = useState<string>('');
 	const [items, setItems] = useState<Array<Object>>([]);
 	const inputSearch = useRef<HTMLInputElement>(null);
+	const [noData, setNoData] = useState<boolean>(false);
 
 	useEffect(() => {
 		const savedRecipes = JSON.parse(localStorage.getItem(lastSearches)) || [];
@@ -26,6 +27,7 @@ const Page = () => {
 	}
 
 	const getRecipesByIngredient = async () => {
+		setNoData(false);
 		fetch(`/api/recipes?ingredient=${ingredient}`, {
 			headers: {
 				Accept: "application/json",
@@ -35,6 +37,9 @@ const Page = () => {
 		.then((data) => {
 			setRecipeData(data);
 			saveSearch(data);
+			if(data.length === 0) {
+				setNoData(true);
+			}
 		})
 		.catch(() => {
 			console.log('An error ocurred')
@@ -68,6 +73,7 @@ const Page = () => {
 	}
 
 	function searchFromHistory(item: string) {
+		setNoData(false);
 		setIngredient(item);
 		inputSearch.current.value = item;
 		getRecipesByIngredientFromSearchHistory(item);
@@ -109,6 +115,7 @@ const Page = () => {
 				</Flex>
 			</FormControl>
 			{recipeData && <RecipeList recipeData={recipeData} /> }
+			{noData && <Text>No recipes for this ingredient</Text>}
 		</Flex>
 	</Container>
 	)
