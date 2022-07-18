@@ -1,4 +1,4 @@
-# airhelp
+# Recipe-Search-spoonacular-API
 
 Search Recipe Application. 
 
